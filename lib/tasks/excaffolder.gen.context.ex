@@ -104,7 +104,7 @@ defmodule Mix.Tasks.Excaffolder.Gen.Context do
     {opts, parsed, _} = parse_opts(args)
     [context_name, schema_name, plural | schema_args] = validate_args!(parsed)
     schema_module = inspect(Module.concat(context_name, schema_name))
-    schema = Gen.Schema.build([schema_module, plural | schema_args], opts, __MODULE__)
+    schema = Mix.Tasks.Phx.Gen.Schema.build([schema_module, plural | schema_args], opts, __MODULE__)
     context = Context.new(context_name, schema, opts)
     {context, schema}
   end
@@ -126,7 +126,7 @@ defmodule Mix.Tasks.Excaffolder.Gen.Context do
   @doc false
   def files_to_be_generated(%Context{schema: schema}) do
     if schema.generate? do
-      Gen.Schema.files_to_be_generated(schema)
+      Mix.Tasks.Phx.Gen.Schema.files_to_be_generated(schema)
     else
       []
     end
@@ -134,7 +134,7 @@ defmodule Mix.Tasks.Excaffolder.Gen.Context do
 
   @doc false
   def copy_new_files(%Context{schema: schema} = context, paths, binding) do
-    if schema.generate?, do: Gen.Schema.copy_new_files(schema, paths, binding)
+    if schema.generate?, do: Mix.Tasks.Phx.Gen.Schema.copy_new_files(schema, paths, binding)
     inject_schema_access(context, paths, binding)
     inject_tests(context, paths, binding)
 
@@ -143,11 +143,11 @@ defmodule Mix.Tasks.Excaffolder.Gen.Context do
 
   defp inject_schema_access(%Context{file: file} = context, paths, binding) do
     unless Context.pre_existing?(context) do
-      Mix.Generator.create_file(file, Mix.Phoenix.eval_from(paths, "priv/templates/excaffolder.gen.context/context.ex", binding))
+      Mix.Generator.create_file(file, Mix.Phoenix.eval_from(paths, "../excaffolder/priv/templates/excaffolder.gen.context/context.ex", binding))
     end
 
     paths
-    |> Mix.Phoenix.eval_from("priv/templates/excaffolder.gen.context/#{schema_access_template(context)}", binding)
+    |> Mix.Phoenix.eval_from("../excaffolder/priv/templates/excaffolder.gen.context/#{schema_access_template(context)}", binding)
     |> inject_eex_before_final_end(file, binding)
   end
 
@@ -157,11 +157,11 @@ defmodule Mix.Tasks.Excaffolder.Gen.Context do
 
   defp inject_tests(%Context{test_file: test_file} = context, paths, binding) do
     unless Context.pre_existing_tests?(context) do
-      Mix.Generator.create_file(test_file, Mix.Phoenix.eval_from(paths, "priv/templates/excaffolder.gen.context/context_test.exs", binding))
+      Mix.Generator.create_file(test_file, Mix.Phoenix.eval_from(paths, "../excaffolder/priv/templates/excaffolder.gen.context/context_test.exs", binding))
     end
 
     paths
-    |> Mix.Phoenix.eval_from("priv/templates/excaffolder.gen.context/test_cases.exs", binding)
+    |> Mix.Phoenix.eval_from("../excaffolder/priv/templates/excaffolder.gen.context/test_cases.exs", binding)
     |> inject_eex_before_final_end(test_file, binding)
   end
 
@@ -186,7 +186,7 @@ defmodule Mix.Tasks.Excaffolder.Gen.Context do
   @doc false
   def print_shell_instructions(%Context{schema: schema}) do
     if schema.generate? do
-      Gen.Schema.print_shell_instructions(schema)
+      Mix.Tasks.Phx.Gen.Schema.print_shell_instructions(schema)
     else
       :ok
     end

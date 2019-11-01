@@ -7,7 +7,9 @@ defmodule Excaffolder.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package(),
+      description: description()
     ]
   end
 
@@ -39,7 +41,9 @@ defmodule Excaffolder.MixProject do
       files: ["lib", "mix.exs", "README*"],
       maintainers: ["Pedro Carvalho"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/pcarvsilva/excaffolder"}
+      links: %{"GitHub" => "https://github.com/pcarvsilva/excaffolder"},
+      files: ~w(lib priv) ++
+      ~w(mix.exs README.md )
     ]
   end
 

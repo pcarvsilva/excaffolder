@@ -157,7 +157,7 @@ defmodule Mix.Tasks.Excaffolder.Gen.Html do
   @doc false
   def copy_new_files(%Context{} = context, paths, binding) do
     files = files_to_be_generated(context)
-    Mix.Phoenix.copy_from(paths, "priv/templates/excaffolder.gen.html", binding, files)
+    Mix.Phoenix.copy_from(paths, "../excaffolder/priv/templates/excaffolder.gen.html", binding, files)
     if context.generate?, do: Mix.Tasks.Excaffolder.Gen.Context.copy_new_files(context, paths, binding)
     context
   end
