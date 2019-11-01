@@ -1,0 +1,72 @@
+<nav role="navigation " class ="sticky top-0 z-10 ">
+  <ul class="-mx-1 flex items-baseline bg-white shadow-lg flex-wrap rounded">
+    <li class="flex-1  text-center">
+      <h1 class="text-base sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl text-blue-900 " ><%= String.upcase(schema.human_plural) %></h1>
+    </li>
+  </ul>
+</nav>
+
+<button phx-click="create" class="mr-2 mb-10  fixed bottom-0 right-0 text-6xl bg-blue-900 hover:bg-blue-400 text-white font-bold rounded-full h-16 w-16 flex items-center justify-center">
+  +    
+</button>
+
+<div class="container mx-auto p-20">
+  <div class="flex flex-row flex-wrap -mx-2">
+
+  <%%= for <%= schema.singular %> <- @<%= schema.plural %> do %>
+
+      <div class="relative w-full sm:w-1/2 md:w-1/4 mb-4 px-2 ">
+      <div class="shadow-2xl  bg-white rounded min-h-full h-24">
+        <div class= "p-2">                 
+          <%= for {k, _} <- schema.attrs do %>                    
+            <%%= <%= schema.singular %>.<%= k %> %>
+          <% end %>        </div>
+        <div class = "mx-2 absolute bottom-0 inset-x-0 bg-blue-900 rounded-b flex flex-row-reverse ">
+            <button phx-click="inspect", phx-value-id = <%%=tester.id %> , class=" hover:text-blue-400 text-white font-bold h-full mx-2">
+              <i class="fa fa-search fa-2x"> </i>
+            </button>
+            <button phx-click="edit", phx-value-id = <%%=tester.id %> , class=" hover:text-blue-400 text-white font-bold h-full mx-2">
+              <i class="fa fa-pencil-square-o fa-2x"> </i>
+            </button>
+        </div>
+      </div>
+    </div>
+  <%% end %>
+</div>
+
+
+<%%= if @show do %>
+  <%%= live_render(
+                  @socket,
+                  <%= inspect context.web_module %>.<%= inspect Module.concat(schema.web_namespace, schema.alias) %>Live.Show,
+                  id: Ecto.UUID.generate, 
+                  session: %{<%= schema.singular %>: @<%= schema.singular %>}
+                  )%>
+<%%  end %> 
+
+<%%= if @new do  %>
+  <%%= live_render(
+                  @socket,
+                  <%= inspect context.web_module %>.<%= inspect Module.concat(schema.web_namespace, schema.alias) %>Live.New,
+                  id: Ecto.UUID.generate,
+                  session: %{
+                    changeset: @changeset,
+                    csrf_token: Plug.CSRFProtection.get_csrf_token(),
+                    current_user: @current_user
+                    }
+              )%>
+<%% end %>
+
+<%%= if @edit do  %>
+  <%%= live_render(
+                  @socket,
+                  <%= inspect context.web_module %>.<%= inspect Module.concat(schema.web_namespace, schema.alias) %>Live.Edit,
+                  id: Ecto.UUID.generate,
+                  session: %{
+                    changeset: @changeset,
+                    csrf_token: Plug.CSRFProtection.get_csrf_token(),
+                    current_user: @current_user,
+                    <%= schema.singular %>: @<%= schema.singular %>
+                    }
+              )%>
+<%% end %>

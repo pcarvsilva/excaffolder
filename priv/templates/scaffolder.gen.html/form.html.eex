@@ -1,0 +1,16 @@
+<%%= form_for @changeset, "#",[csrf_token: @csrf_token, phx_change: :validate, phx_submit: :save], fn f -> %>
+  <%= for {label, input, error} <- inputs, input do %>
+    <%= label %>
+    <%= input %>
+    <%= error %>
+  <% end %>
+  <div>
+    <br>
+    <%%= if @changeset.valid? do %>
+      <div class="relative">
+        <%%= submit "Save", class: "w-full animated zoomIn float-right bg-blue-900 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded"%>
+      <div>
+    <%% end %>
+  </div>
+  <br>
+<%% end %>
