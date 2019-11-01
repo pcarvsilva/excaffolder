@@ -8,11 +8,11 @@ The package can be installed as:
 
   1. Add excaffolder to your list of dependencies in `mix.exs`:
 
-    ```elixir
+```elixir
     def deps do
       [{:excaffolder, "~> 0.0.1"}]
     end
-    ```
+```
 
   2. Run `mix deps.get` in your console to fetch from Hex
 
@@ -62,17 +62,17 @@ Generates controller, views, and context for an HTML resource.
       config :my_app_web, :generators, context_app: :my_app
 
   Alternatively, the `--context-app` option may be supplied to the generator:
-
+```elixir
       mix excaffolder.gen.html Sales User users --context-app warehouse
-
+```
   ## Web namespace
 
   By default, the controller and view will be namespaced by the schema name.
   You can customize the web module namespace by passing the `--web` flag with a
   module name, for example:
-
+```elixir
       mix excaffolder.gen.html Sales User users --web Sales
-
+```
   Which would generate a `lib/app_web/controllers/sales/user_controller.ex` and
   `lib/app_web/views/sales/user_view.ex`.
 
@@ -88,9 +88,9 @@ Generates controller, views, and context for an HTML resource.
   By default, the table name for the migration and schema will be
   the plural name provided for the resource. To customize this value,
   a `--table` option may be provided. For example:
-
+```elixir
       mix excaffolder.gen.html Accounts User users --table cms_users
-
+```
   ## binary_id
 
   Generated migration can use `binary_id` for schema's primary key
@@ -100,12 +100,12 @@ Generates controller, views, and context for an HTML resource.
 
   This generator uses default options provided in the `:generators`
   configuration of your application. These are the defaults:
-
+```elixir
       config :your_app, :generators,
         migration: true,
         binary_id: false,
         sample_binary_id: "11111111-1111-1111-1111-111111111111"
-
+```
   You can override those options per invocation by providing corresponding
   switches, e.g. `--no-binary-id` to use normal ids despite the default
   configuration or `--migration` to force generation of the migration.
